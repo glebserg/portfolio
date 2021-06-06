@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>{{news_item.title}}</title>
+</head>
+<body>
+<a href="/news_list/"><font size="1">Список новостей</font></a>
+<h2>
+    {{news_item.title}}
+    <a>
+        {% if news_item.flag_active %}
+        <font size="1" color="red">Активный</font>
+        {%else%}
+        <font size="1" color="red">Не очень активный</font>
+        {% endif %}
+    </a>
+</h2>
+<p>{{news_item.content}}</p>
+<p>
+    <a href="/news_list/{{news_id}}/edit"><font size="1">Редактировать</font></a>
+    <font size="1">Опубликовано: {{news_item.create_date}}</font>
+    <font size="1">Отредактировано: {{news_item.edit_date}}</font>
+</p>
+<br>
+<br>
+<p>Комментарии:</p>
+<form method="post" action="/news_list/{{news_id}}">
+    {% csrf_token %}
+    <table>
+        <tr>
+            <td>Имя пользователя: </td>
+            <td>
+                {% if request.user.is_authenticated %}
+                    {{request.user.username}}
+                {% else %}
+                    {{ comment_form.name_author }}
+                {% endif %}
+            </td>
+        </tr>
+
+        <tr>
+            <td>Комментарий</td>
+            <td>{{ comment_form.text }}</td>
+        </tr>
+    </table>
+    <button type="submit">Оставить комментарий</button>
+</form>
+
+<br>
+{% if comment_list %}
+{% for comment in comment_list %}
+<p>{{comment.name_author}}: {{comment.text|truncatechars:16}} </p>
+{%endfor%}
+{%else%}
+<p>Пока никто не комментировал.</p>
+{% endif%}
+</body>
+</html>

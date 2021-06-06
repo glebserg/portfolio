@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Добавление новости</title>
+</head>
+<body>
+    <a href="/news_list/"><font size="1">Список новостей</font></a>
+    <h2>Добавление новости</h2>
+    {% if request.user.is_authenticated %}
+        <form method="post" action="/news_list/create/">
+            {% csrf_token %}
+            {{ item_form.as_p }}
+            <button type="submit">Добавить</button>
+        </form>
+    {% else %}
+        <a>Добавлять новости могут только авторизованные пользователи!</a>
+    {% endif %}
+
+
+</body>
+</html>
